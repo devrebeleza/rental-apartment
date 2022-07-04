@@ -1,34 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a project developed in Bootcamp Flavio Copes 2022
 
-## Getting Started
+People can use this app to rent our house.
 
-First, run the development server:
+We have our own nice looking website where people can look at the photos of the house, the map to reach it, some information about what they will find in the house and in the surroundings, a page with the availability calendar, and a Stripe checkout.
 
-```bash
-npm run dev
-# or
-yarn dev
+It’s like an hotel, but with a single room. Or a villa.
+
+When a new booking comes in w'll send a confirmation email to the buyer, and a notification to the apartment owner.
+
+we’ll define prices through a configuration file.
+
+Instead of a dashboard, we’ll email you when someone books, to add the reservation to your house calendar.
+
+## Libraries Installed
+
+1. Next.js app (ReactJS Framework)
+2. TailwindCSS with postcss, autoprefixer (CSS)
+3. Prisma (ORM)
+4. PostgreSQL (railway)
+5. Stripe to Payment Processing Platform for the Internet
+
+> We need to define a database locally or on a cloud service like [Railway.app](http://railway.app).
+
+> We need in the end is a working empty database and a connection URL like this:
+
+```jsx
+//locally:
+
+postgresql://rgarcia@127.0.0.1/digital_download_platform
+
+//or with Railway:
+
+postgresql://postgres:zHSFcCwioUwpEseCPBD3ST@containers-us-west-16.railway.app:7131/railway
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Create a `.env` file, with the environment variables:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+EMAIL_SERVER=smtp://user:pass@smtp.mailtrap.io:2525  // port: 25 or 465 or 587 or 2525
+EMAIL_FROM=Your name <you@email.com>
+NEXTAUTH_URL=http://localhost:3000
+SECRET=<ENTER A UNIQUE STRING HERE>
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+To define a SECRET key, we can use [https://generate-secret.vercel.app/32](https://generate-secret.vercel.app/32
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+We can use [https://mailtrap.io](https://mailtrap.io/) to test the emails.
 
-## Learn More
+> For Stripe we need to define our secret and public key, and our webhook key
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+STRIPE_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+BASE_URL=http://localhost:3000  (for local test)
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxxx
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> To apply changes to the database execute
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+  npx prisma migrate dev
+```
 
-## Deploy on Vercel
+> run the app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+  npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> in other cmd, init webhook Stripe to accept POST request to our API (windows)
+
+```bash
+.\stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+we need to execute the previous command to listen stripe, don't close this connection
