@@ -19,6 +19,7 @@ Instead of a dashboard, we’ll email you when someone books, to add the reserva
 3. Prisma (ORM)
 4. PostgreSQL (railway)
 5. Stripe to Payment Processing Platform for the Internet
+6. react-day-picker (to create calendars)
 
 > We need to define a database locally or on a cloud service like [Railway.app](http://railway.app).
 
