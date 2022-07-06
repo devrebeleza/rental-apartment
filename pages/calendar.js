@@ -2,12 +2,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import { addDayToRange, getCost, getDatesBetweenDates, isDaySelectable } from 'lib/dates';
+import { addDayToRange, getBlockedDates, getCost, getDatesBetweenDates, isDaySelectable, monthsFromNow, yesterDay } from 'lib/dates';
 import { useState } from 'react';
+import { getBookedDates } from 'lib/booking';
 
 export default function Calendar() {
 	const [from, setFrom] = useState();
 	const [to, setTo] = useState();
+	const monthsBefore = 6; // months before to disable dates
 
 	const handleDayClick = (day) => {
 		const range = addDayToRange(day, { from, to });
@@ -95,6 +97,7 @@ export default function Calendar() {
 							modifiers={{ start: from, end: to }}
 							onDayClick={handleDayClick}
 							// mode='range'
+							disabled={[...getBlockedDates(), ...getBookedDates(), { from: new Date('0000'), to: yesterDay() }, { from: monthsFromNow(monthsBefore), to: new Date('4000') }]}
 						/>
 					</div>
 				</div>
