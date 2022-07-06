@@ -49,8 +49,8 @@ export default function Calendar() {
 									<div className={`relative text-right ${!isDaySelectable(props.date) && 'text-gray-500'}`}>
 										<div>{props.date.getDate()}</div>
 										{isDaySelectable(props.date) && (
-											<div className='-mt-2'>
-												<span className={`bg-white text-black rounded-md font-bold px-1 text-xs`}>${getCost(props.date)}</span>
+											<div className='-mt-2 '>
+												<span className={`bg-white text-black rounded-md  font-bold px-1 text-xs`}>${getCost(props.date)}</span>
 											</div>
 										)}
 									</div>
