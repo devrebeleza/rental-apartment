@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { getCost, isDaySelectable } from 'lib/dates';
 
 export default function Calendar() {
 	return (
@@ -42,7 +43,20 @@ export default function Calendar() {
 				<div className='flex flex-col mt-10'>
 					<p className='text-2xl font-bold text-center my-10'>Availability and prices per night</p>
 					<div className='flex justify-center pt-6 availability-calendar'>
-						<DayPicker />
+						<DayPicker
+							components={{
+								DayContent: (props) => (
+									<div className={`relative text-right ${!isDaySelectable(props.date) && 'text-gray-500'}`}>
+										<div>{props.date.getDate()}</div>
+										{isDaySelectable(props.date) && (
+											<div className='-mt-2'>
+												<span className={`bg-white text-black rounded-md font-bold px-1 text-xs`}>${getCost(props.date)}</span>
+											</div>
+										)}
+									</div>
+								),
+							}}
+						/>
 					</div>
 				</div>
 			</div>
