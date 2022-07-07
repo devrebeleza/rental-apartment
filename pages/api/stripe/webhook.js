@@ -1,3 +1,4 @@
+import sendEmail from 'lib/email';
 import prisma from 'lib/prisma';
 import getRawBody from 'raw-body';
 
@@ -54,6 +55,9 @@ const handler = async (req, res) => {
 				},
 				where: { sessionId },
 			});
+
+			sendEmail('jore_ma@yahoo.com.ar', 'New booking', ` ${email} booked from ${new Date(booking.from).toDateString()} to ${new Date(booking.to).toDateString()}`);
+			sendEmail(email, 'Thanks for booking', `Your booking from ${new Date(booking.from).toDateString()} to ${new Date(booking.to).toDateString()} is confirmed!`);
 		} catch (err) {
 			console.error(err);
 		}
