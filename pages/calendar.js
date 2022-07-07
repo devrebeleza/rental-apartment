@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import { addDayToRange, getBlockedDates, getCost, getDatesBetweenDates, isDaySelectable, monthsFromNow, yesterDay } from 'lib/dates';
+import { addDayToRange, calcNumberofNightsBetweenDates, calcTotalCostOfStay, getBlockedDates, getCost, getDatesBetweenDates, isDaySelectable, monthsFromNow, yesterDay } from 'lib/dates';
 import { useState } from 'react';
 import { getBookedDates } from 'lib/booking';
 
@@ -10,6 +10,8 @@ export default function Calendar() {
 	const [from, setFrom] = useState();
 	const [to, setTo] = useState();
 	const monthsBefore = 6; // months before to disable dates
+	const [numberOfNights, setNumberOfNights] = useState(0);
+	const [totalCost, setTotalCost] = useState(0);
 
 	const handleDayClick = (day) => {
 		const range = addDayToRange(day, { from, to });
@@ -40,6 +42,14 @@ export default function Calendar() {
 
 		setFrom(range.from);
 		setTo(range.to);
+
+		if (!range.from) {
+			setNumberOfNights(0);
+			setTotalCost(0);
+		} else {
+			setNumberOfNights(calcNumberofNightsBetweenDates(range.from, range.to) + 1);
+			setTotalCost(calcTotalCostOfStay(range.from, range.to));
+		}
 	};
 
 	return (
@@ -79,6 +89,22 @@ export default function Calendar() {
 				</div>
 				<div className='flex flex-col mt-10'>
 					<p className='text-2xl font-bold text-center my-10'>Availability and prices per night</p>
+					<p className='text-center'>{numberOfNights > 0 && `Stay for ${numberOfNights} nights`}</p>
+					<p className='text-center mt-2'>{totalCost > 0 && `Total cost: ${totalCost}`}</p>
+					<p className='text-center'>
+						{from && to && (
+							<button
+								className='border px-2 py-1 mt-4'
+								onClick={() => {
+									setFrom(null);
+									setTo(null);
+									setNumberOfNights(0);
+									setTotalCost(0);
+								}}>
+								Reset
+							</button>
+						)}
+					</p>
 					<div className='flex justify-center pt-6 availability-calendar'>
 						<DayPicker
 							components={{
