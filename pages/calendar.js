@@ -5,8 +5,9 @@ import 'react-day-picker/dist/style.css';
 import { addDayToRange, calcNumberofNightsBetweenDates, calcTotalCostOfStay, getBlockedDates, getCost, getDatesBetweenDates, isDaySelectable, monthsFromNow, yesterDay } from 'lib/dates';
 import { useState } from 'react';
 import { getBookedDates } from 'lib/booking';
+import prisma from 'lib/prisma';
 
-export default function Calendar() {
+export default function Calendar({ bookedDates }) {
 	const [from, setFrom] = useState();
 	const [to, setTo] = useState();
 	const monthsBefore = 6; // months before to disable dates
@@ -17,7 +18,7 @@ export default function Calendar() {
 		const range = addDayToRange(day, { from, to });
 
 		if (!range.to) {
-			if (!isDaySelectable(range.from)) {
+			if (!isDaySelectable(range.from, bookedDates)) {
 				alert('This date cannot be selected');
 				return;
 			}
@@ -25,7 +26,7 @@ export default function Calendar() {
 		}
 
 		if (range.to && range.from) {
-			if (!isDaySelectable(range.to)) {
+			if (!isDaySelectable(range.to, bookedDates)) {
 				alert('The end date cannot be selected');
 				return;
 			}
@@ -34,7 +35,7 @@ export default function Calendar() {
 		const daysInBeetween = getDatesBetweenDates(range.from, range.to);
 
 		for (const dayInBeetween of daysInBeetween) {
-			if (!isDaySelectable(dayInBeetween)) {
+			if (!isDaySelectable(dayInBeetween, bookedDates)) {
 				alert('Some days between those 2 dates cannot be selected');
 				return;
 			}
@@ -137,9 +138,9 @@ export default function Calendar() {
 						<DayPicker
 							components={{
 								DayContent: (props) => (
-									<div className={`relative text-right ${!isDaySelectable(props.date) && 'text-gray-500'}`}>
+									<div className={`relative text-right ${!isDaySelectable(props.date, bookedDates) && 'text-gray-500'}`}>
 										<div>{props.date.getDate()}</div>
-										{isDaySelectable(props.date) && (
+										{isDaySelectable(props.date, bookedDates) && (
 											<div className='-mt-2 '>
 												<span className={`bg-white text-black rounded-md  font-bold px-1 text-xs`}>${getCost(props.date)}</span>
 											</div>
@@ -151,11 +152,19 @@ export default function Calendar() {
 							modifiers={{ start: from, end: to }}
 							onDayClick={handleDayClick}
 							// mode='range'
-							disabled={[...getBlockedDates(), ...getBookedDates(), { from: new Date('0000'), to: yesterDay() }, { from: monthsFromNow(monthsBefore), to: new Date('4000') }]}
+							disabled={[...getBlockedDates(), ...bookedDates, { from: new Date('0000'), to: yesterDay() }, { from: monthsFromNow(monthsBefore), to: new Date('4000') }]}
 						/>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
+}
+
+export async function getServerSideProps() {
+	let bookedDates = await getBookedDates(prisma);
+	//if (!bookedDates) return { props: {} };
+	bookedDates = JSON.parse(JSON.stringify(bookedDates));
+
+	return { props: { bookedDates } };
 }
