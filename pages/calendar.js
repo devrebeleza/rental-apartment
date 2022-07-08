@@ -153,6 +153,9 @@ export default function Calendar({ bookedDates }) {
 							onDayClick={handleDayClick}
 							// mode='range'
 							disabled={[...getBlockedDates(), ...bookedDates, { from: new Date('0000'), to: yesterDay() }, { from: monthsFromNow(monthsBefore), to: new Date('4000') }]}
+							styles={{
+								cell: { padding: '1rem', size: '2rem' },
+							}}
 						/>
 					</div>
 				</div>

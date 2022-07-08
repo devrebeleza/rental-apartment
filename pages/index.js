@@ -21,36 +21,44 @@ const mockReviews = [
 
 const mockDestinations = [
 	{
-		name: 'Lake Como',
-		description: '26km, 32 minutes by car',
+		name: 'Circuito Chico',
+		description: '60km, 55 minutes by car',
+		src: '/img/circuito_chico.png',
 	},
 	{
-		name: 'Milano',
-		description: '124km, 2h by car or 1h 40m by train',
+		name: 'Cerro Campanario',
+		description: '25km, 15 minutes by car',
+		src: '/img/campanario.jpg',
 	},
 	{
-		name: 'Passo San Marco',
-		description: '17km, 28 minutes by car',
+		name: 'Cerro Catedral',
+		description: '5 minutes walking, in winter ski or snowboard, in summer trekking ',
+		src: '/img/catedral.jpeg',
 	},
 	{
-		name: 'Passo Spluga',
-		description: '71km, 1h 37min by car',
+		name: 'National Park Los Arrayanes',
+		description: '35km, 37 minutes by boat',
+		src: '/img/arrayanes.jpg',
 	},
 	{
-		name: 'St Moritz',
+		name: 'Lago Traful y bosque inundado',
 		description: '92km, 1h 52m by car',
+		src: '/img/traful-2.jpg',
 	},
 	{
-		name: 'Passo Bernina',
-		description: '92km, 1hr 51 minutes by car',
+		name: 'Colonia Suiza',
+		description: '25km, 30 minutes by car',
+		src: '/img/colonia_suiza.jpg',
 	},
 	{
-		name: 'Bormio',
-		description: '97km, 1h 43 min by car',
+		name: 'El Bolson',
+		description: '130km, 1h 43 min by car',
+		src: '/img/el-bolson.jpg',
 	},
 	{
-		name: 'Livigno',
-		description: '133km, 2h 35min by car',
+		name: 'Villa la Angostura',
+		description: '82.2km, 1h 24min by car',
+		src: '/img/villa_la_angostura.jpg',
 	},
 ];
 
@@ -73,7 +81,7 @@ export default function Home() {
 						<span className='block text-gray-300'>in the Argentine Patagonia</span>
 					</h1>
 					<p className='mt-6 max-w-2xl mx-auto text-center text-xl'>
-						Domo locate in the hamlet of Valle di Bariloche, at 800 meters of height, is 10 minutes from Bariloche. It can be reached by car and by bus from Bariloche, witha a stop near the house.
+						Domo locate in the hamlet of Valle di Bariloche, at 800 meters of height, is 10 minutes from Bariloche. It can be reached by car and by bus from Bariloche, with a stop near the house.
 						Ideal for mountain and animal lovers. Your furry friends are welcome. Equipped with heating by pellet stove, it is also possible to light the large fireplace.
 					</p>
 					<div className='mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm: justify-center'>
@@ -149,6 +157,12 @@ export default function Home() {
 								<div className='pt-6' key={index}>
 									<div className='rounded-lg px-6 pb-8'>
 										<div className='-mt-6'>
+											{destination.src && (
+												<div className='aspect-w-4 aspect-h-5 rounded-lg sm:overflow-hidden lg:aspect-w-3 lg:aspect-h-4'>
+													{/* <img src='/img/5.jpg' className='w-full h-full object-center object-cover' /> */}
+													<img src={destination.src} alt={destination.name} className='w-full h-full object-center' />
+												</div>
+											)}
 											<h3 className='mt-8 text-lg font-medium tracking-tight '>{destination.name}</h3>
 											<p className='mt-5 text-base text-gray-400'>{destination.description}</p>
 										</div>
